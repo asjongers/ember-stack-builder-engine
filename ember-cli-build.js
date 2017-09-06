@@ -1,23 +1,18 @@
 /*jshint node:true*/
 /* global require, module */
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 var nodeSass = require('node-sass'); // loads the version in your package.json
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
+  var app = new EmberAddon(defaults, {
     // Add options here
     sassOptions: {
       includePaths: [
         'bower_components/materialize/sass'
       ],
       nodeSass: nodeSass // Workaround for ember-cli-sass bug https://github.com/aexmachina/ember-cli-sass/issues/117
-    },
-    fingerprint: {
-      exclude: ['images/logo.png']
     }
   });
-
-  app.import("bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js");
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

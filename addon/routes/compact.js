@@ -3,6 +3,7 @@ import { task, timeout } from 'ember-concurrency';
 import env from '../config/environment';
 
 export default Ember.Route.extend({
+  store: Ember.inject.service('store'),
   queryParams: {
     searchValue: {
       refreshModel: true
@@ -33,5 +34,5 @@ export default Ember.Route.extend({
       };
     }
     return yield this.get('store').query('docker-compose', params);
-  }).restartable(),
+  }).restartable()
 });

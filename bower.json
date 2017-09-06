@@ -1,8 +1,11 @@
 {
-  "name": "stack-builder",
+  "name": "ember-stack-builder-engine",
   "dependencies": {
+    "ember": "~2.14.1",
     "materialize": "0.97.6",
-    "FileSaver": "^1.3.3",
-    "jquery-textcomplete": "^1.8.0"
+    "jquery-textcomplete": "^1.8.0",
+    "FileSaver": "^1.3.3"
+  },
+  "devDependencies": {
   }
 }
