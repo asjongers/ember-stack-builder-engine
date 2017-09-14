@@ -5,10 +5,9 @@ import RSVP from 'rsvp';
 import DockerFileParser from '../mixins/docker-file-parser';
 
 export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFileParser, {
+
   // We need this in case we drag'n'drop dockerText to the text of our dockerfile
   // the size of the textarea should be recalculated
-
-  // Support to be able to use tabulation inside the textarea
   setupTextAreaTab(evt) {
     let that, end, start;
     if (evt.keyCode === 9) {
@@ -21,10 +20,20 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
     }
   },
 
-
   // Every jQuery event needs to be wrapped inside the ember run loop
-  didInsertElement: function() {
+  didInsertElement() {
+
+    Array.prototype.flatten = function() {
+      let arr = this;
+      while (arr.find(el => Array.isArray(el))) { arr = Array.prototype.concat(...arr); }
+      return arr;
+    };
+
     Ember.$('#textarea-autocomplete').on('keydown', this.setupTextAreaTab);
+
+    document.addEventListener('keyup', () => {
+      this.getCursorYmlPath();
+    });
 
     Ember.run.scheduleOnce('afterRender', this, function() {
       // This is necessary because the addition of this addon resets scroll
@@ -66,6 +75,129 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
       return this.get('oldServices');
     }
   }),
+
+  yamlObject: Ember.computed('changeset.text', function() {
+    try {
+      const yaml = this.yamlParser(this.get('changeset.text'));
+      this.setProperties({
+        yamlErrorMessage: '',
+        yamlError: false
+      });
+      return yaml;
+    }
+    catch (err) {
+      this.setProperties({
+        yamlErrorMessage: err,
+        yamlError: true
+      });
+      return null;
+    }
+  }),
+
+
+  // Get indices of all ocurrences of string in a string
+  getIndicesOf(searchStr, str) {
+      let searchStrLen = searchStr.length;
+      if (searchStrLen === 0) {
+          return [];
+      }
+      let startIndex = 0, index, indices = [];
+      while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+          indices.push(index);
+          startIndex = index + searchStrLen;
+      }
+      return indices;
+  },
+
+  // Returns the padding of a string from the cursor index to a direction until
+  // it ends or finds any stop character.
+  stringPad(direction, write) {
+    return function (text, cursor) {
+      let stopChars = ['\n', '\t'];
+      let i = cursor;
+      let predicate = write ? () => stopChars.indexOf(text[i-1]) : () => stopChars.indexOf(text[i]);
+      while (predicate() === -1 && i > 0 && i < text.length) {
+        if (direction === 'right') {
+          i = i + 1;
+        }
+        else if (direction === 'left') {
+          i = i - 1;
+        }
+        else {
+          break;
+        }
+      }
+      if (direction === 'right') {
+        return {
+          text: text.slice(cursor, i),
+          index: i
+        };
+      }
+      else if (direction === 'left') {
+        return {
+          text: text.slice(i, cursor),
+          index: i
+        };
+      }
+      else {
+        return { text: "", index: -1 };
+      }
+    };
+  },
+
+  // Get an array of drc yml object paths that have the context string as a match.
+  getYmlPathMatches(contextString, yaml, path) {
+    if (yaml && yaml !== null) {
+      let currentPath = path || "root";
+
+      return Object.keys(yaml).map((key) => {
+        if (typeof yaml[key] === "object" && yaml[key] !== null) {
+          if (contextString.includes(key)) {
+            return [`${currentPath}.${key}`].concat(this.getYmlPathMatches(contextString, yaml[key], `${currentPath}.${key}`));
+          }
+          else {
+            return this.getYmlPathMatches(contextString, yaml[key], `${currentPath}.${key}`);
+          }
+        }
+        else {
+          // Key is not of numeric type (so we are not inside an array)
+          if (isNaN(key)) {
+            if (contextString.includes(key) || contextString.includes(yaml[key])) {
+              return `${currentPath}.${key}`;
+            }
+            else {
+              return [];
+            }
+          }
+          else {
+            if (contextString.includes(yaml[key])) {
+              return `${currentPath}.${key}`;
+            }
+            else {
+              return [];
+            }
+          }
+        }
+      });
+    }
+    else {
+      return [];
+    }
+  },
+
+  // Get the path in the docker-compose yml object where the cursor is.
+  // Variable write indicates whether the user is moving cursor or typing.
+  getCursorYmlPath(write = false) {
+    const text = this.get('changeset.text');
+    const cursorPosition = Ember.$('#textarea-autocomplete').prop("selectionStart");
+    const stringLeft = this.stringPad('left', write);
+    const stringRight = this.stringPad('right', write);
+    const contextString = `${stringLeft(text, cursorPosition).text.trim()}${stringRight(text, cursorPosition).text.trim()}`;
+    const pathMatches = this.getYmlPathMatches(contextString, this.get('yamlObject')).flatten();
+    const tramo = text.length / pathMatches.length;
+    const probableIndex = Math.floor(cursorPosition / tramo);
+    return pathMatches[probableIndex];
+  },
 
   textAreaObserver: Ember.observer('changeset.text', function() {
     this.recalculateTextareaSize();
