@@ -29,7 +29,7 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
       return arr;
     };
 
-    Ember.$('#textarea-autocomplete').on('keydown', this.setupTextAreaTab);
+    Ember.$('.textarea-autocomplete').on('keydown', this.setupTextAreaTab);
 
     document.addEventListener('keyup', () => {
       this.getCursorYmlPath();
@@ -37,11 +37,11 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
 
     Ember.run.scheduleOnce('afterRender', this, function() {
       // This is necessary because the addition of this addon resets scroll
-      Ember.$('#textarea-autocomplete').height(Ember.$('#textarea-autocomplete').prop('scrollHeight'));
+      Ember.$('.textarea-autocomplete').height(Ember.$('.textarea-autocomplete').prop('scrollHeight'));
 
       let that = this;
 
-      Ember.$('#textarea-autocomplete').textcomplete([{
+      Ember.$('.textarea-autocomplete').textcomplete([{
         match: /(^|\b)(\w{2,})$/,
         search: function(term, callback) {
           callback(that.get('drcServiceNames').filter(function(service) {
@@ -189,7 +189,7 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
   // Variable write indicates whether the user is moving cursor or typing.
   getCursorYmlPath(write = false) {
     const text = this.get('changeset.text');
-    const cursorPosition = Ember.$('#textarea-autocomplete').prop("selectionStart");
+    const cursorPosition = Ember.$('.textarea-').prop("selectionStart");
     const stringLeft = this.stringPad('left', write);
     const stringRight = this.stringPad('right', write);
     const contextString = `${stringLeft(text, cursorPosition).text.trim()}${stringRight(text, cursorPosition).text.trim()}`;
