@@ -20,8 +20,8 @@ export default Ember.Component.extend({
       this.set('showDialog', false);
       this.sendAction('delete');
     },
-    goToCompactView: function() {
-      this.sendAction('goToCompactView');
+    goToIndexView: function() {
+      this.sendAction('goToIndexView');
     }
   }
 });

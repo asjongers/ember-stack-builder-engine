@@ -235,7 +235,7 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
     cancel: function() {
       this.get('changeset').rollback();
       if (this.get('newFile')) {
-        this.sendAction('goToCompactView');
+        this.sendAction('goToIndexView');
         return true;
       }
       return false;

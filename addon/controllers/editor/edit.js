@@ -3,17 +3,17 @@ import DockerComposeValidations from '../../validations/docker-compose';
 
 export default Ember.Controller.extend({
   DockerComposeValidations,
-  goToCompactView: function() {
-    this.transitionToRoute('compact');
+  goToIndexView: function() {
+    this.transitionToRoute('index');
   },
   actions: {
-    goToCompactView: function() {
-      this.goToCompactView();
+    goToIndexView: function() {
+      this.goToIndexView();
     },
     delete: function() {
       this.set('showDialog', false);
       this.get('model').destroyRecord().then(() => {
-        this.goToCompactView();
+        this.goToIndexView();
       });
     }
   }
