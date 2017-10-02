@@ -4,7 +4,9 @@
 module.exports = function(environment) {
   const ENV = {
     modulePrefix: 'ember-stack-builder-engine',
-    environment: environment
+    environment: environment,
+    searchDebounceMiliseconds: 250,
+    defaultNumberOfContainers: 2
   };
 
   return ENV;
