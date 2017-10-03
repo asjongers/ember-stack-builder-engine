@@ -10,6 +10,9 @@ const Eng = Engine.extend({
   dependencies: {
     services: [
       'store'
+    ],
+    externalRoutes: [
+      'swarmUiList'
     ]
   }
 });
