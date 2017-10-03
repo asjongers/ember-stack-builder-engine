@@ -1,6 +1,6 @@
 <div class="edit">
   {{text-editor changeset=(changeset model DockerComposeValidations) allowDelete=true allowDownload=true  goToIndexView=(action 'goToIndexView') delete=(action 'delete')}}
-  {{#md-card-collapsible}}
+  {{#md-card-collapsible }}
     {{related-stacks model=model}}
     {{container-manager}}
   {{/md-card-collapsible }}

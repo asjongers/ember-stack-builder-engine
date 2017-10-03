@@ -1,9 +1,11 @@
-{{#md-collapsible title="Related stacks" icon='dns'}}
-  <label>List of stacks related to <strong>{{model.title}}</strong> docker-compose file. Click on one to open it in the Swarm UI.</label>
+{{#md-collapsible title="Related stacks" icon='dns' }}
+  <div class="related-stacks">
+    <label>List of stacks related to <strong>{{model.title}}</strong> docker-compose file. Click on one to open it in the Swarm UI.</label>
 
-  <div class="stack-list">
-    {{#md-collection content=model.relatedStacks as |stack index|}}
-      {{link-to-external stack.title 'swarmUiList' class='collection-item' tagName='a'}}
-    {{/md-collection}}
+    <div class="stack-list">
+      {{#md-collection content=model.relatedStacks as |stack index|}}
+        {{link-to-external stack.title 'swarmUiList' class='collection-item' tagName='a'}}
+      {{/md-collection}}
+    </div>
   </div>
 {{/md-collapsible }}

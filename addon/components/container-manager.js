@@ -8,7 +8,8 @@ import RSVP from 'rsvp';
 
 export default Ember.Component.extend({
   store: Ember.inject.service(),
-  classNames: ['container-manager'],
+  // classNames: ['container-manager'],
+  tagName: '',
   containerList: task(function*(term) {
     // if (Ember.isBlank(term)) {
     //   return this.get('model');
