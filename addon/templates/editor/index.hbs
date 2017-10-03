@@ -1,4 +1,6 @@
 <div class="new">
   {{text-editor changeset=(changeset model DockerComposeValidations) goToIndexView=(action 'goToIndexView') newFile=true}}
-  {{container-manager}}
+  {{#md-card-collapsible }}
+    {{container-manager}}
+  {{/md-card-collapsible }}
 </div>
