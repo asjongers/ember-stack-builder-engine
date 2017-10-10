@@ -4,7 +4,7 @@
 
     <div class="stack-list">
       {{#md-collection content=model.relatedStacks as |stack index|}}
-        {{link-to-external stack.title 'swarmUiList' class='collection-item' tagName='a'}}
+        {{link-to-external stack.title 'swarmUiList' (query-params relatedStack=stack.id) class='collection-item' tagName='a'}}
       {{/md-collection}}
     </div>
   </div>
