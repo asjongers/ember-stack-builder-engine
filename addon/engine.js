@@ -12,7 +12,8 @@ const Eng = Engine.extend({
       'store'
     ],
     externalRoutes: [
-      'swarmUiList'
+      'swarmUiList',
+      'workflow'
     ]
   }
 });

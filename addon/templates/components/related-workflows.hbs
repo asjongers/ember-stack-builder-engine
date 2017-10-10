@@ -1,0 +1,11 @@
+{{#md-collapsible title="Related Workflows" icon='widgets' }}
+  <div class="related-workflows">
+    <label>List of workflows related to <strong>{{model.title}}</strong> docker-compose file. Click on one to open it in the Workflow Builder.</label>
+
+    <div class="workflow-list">
+      {{#md-collection content=model.relatedWorkflows as |workflow index|}}
+        {{link-to-external workflow.title 'workflow' workflow.id class='collection-item' tagName='a'}}
+      {{/md-collection}}
+    </div>
+  </div>
+{{/md-collapsible }}
