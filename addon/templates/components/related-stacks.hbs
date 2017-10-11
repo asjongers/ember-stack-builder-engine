@@ -3,9 +3,16 @@
     <label>List of stacks related to <strong>{{model.title}}</strong> docker-compose file. Click on one to open it in the Swarm UI.</label>
 
     <div class="stack-list">
-      {{#md-collection content=model.relatedStacks as |stack index|}}
-        {{link-to-external stack.title 'swarmUiList' (query-params relatedStack=stack.id) class='collection-item' tagName='a'}}
-      {{/md-collection}}
+        {{#if model.relatedStacks}}
+          {{#md-collection content=model.relatedStacks as |stack index|}}
+            {{link-to-external stack.title 'swarmUiList' (query-params relatedStack=stack.id) class='collection-item' tagName='a'}}
+          {{/md-collection}}
+        {{else}}
+          <div class="collection">
+            <a class='collection-item pink-text' >No related stack</a>
+          </div>
+        {{/if}}
+
     </div>
   </div>
 {{/md-collapsible }}
