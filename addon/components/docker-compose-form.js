@@ -6,19 +6,7 @@ import DockerFileParser from '../mixins/docker-file-parser';
 
 export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFileParser, {
 
-  // We need this in case we drag'n'drop dockerText to the text of our dockerfile
-  // the size of the textarea should be recalculated
-  setupTextAreaTab(evt) {
-    let that, end, start;
-    if (evt.keyCode === 9) {
-      start = this.selectionStart;
-      end = this.selectionEnd;
-      that = Ember.$(this);
-      that.val(that.val().substring(0, start) + "\t" + that.val().substring(end));
-      this.selectionStart = this.selectionEnd = start + 1;
-      return false;
-    }
-  },
+
 
   // Every jQuery event needs to be wrapped inside the ember run loop
   didInsertElement() {
@@ -28,8 +16,6 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
       while (arr.find(el => Array.isArray(el))) { arr = Array.prototype.concat(...arr); }
       return arr;
     };
-
-    Ember.$('#textarea-autocomplete').on('keydown', this.setupTextAreaTab);
 
     document.addEventListener('keyup', () => {
       this.getCursorYmlPath();
@@ -76,23 +62,29 @@ export default Ember.Component.extend(ResizeTextareaMixin, FileSaver, DockerFile
     }
   }),
 
-  yamlObject: Ember.computed('changeset.text', function() {
-    try {
-      const yaml = this.yamlParser(this.get('changeset.text'));
-      this.setProperties({
-        yamlErrorMessage: '',
-        yamlError: false
-      });
-      return yaml;
-    }
-    catch (err) {
-      this.setProperties({
-        yamlErrorMessage: err,
-        yamlError: true
-      });
-      return null;
-    }
-  }),
+  dockerTextChanged: Ember.observer('changeset.text', function() {
+    Ember.run.next(this, function(){
+      try {
+        let yamlObj = this.checkYaml();
+        this.setProperties({
+          yamlErrorMessage: '',
+          yamlError: false,
+          yamlObject: yamlObj
+        });
+      }
+      catch(err){
+        this.setProperties({
+          yamlErrorMessage: err,
+          yamlError: true,
+          yamlObject: null
+        });
+      }
+    });
+  }).on('init'),
+
+  checkYaml() {
+    this.yamlParser(this.get('changeset.text'));
+  },
 
 
   // Get indices of all ocurrences of string in a string

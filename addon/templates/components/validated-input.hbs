@@ -3,7 +3,7 @@
     {{md-input type="text" value=value label=label }}
   {{else if (eq type "textarea")}}
   <div class="input-field">
-    {{textarea id="textarea-autocomplete" value=value label=label}}
+    {{textarea id="textarea-autocomplete" value=value label=label escape-press=(action 'escapePress') key-down=(action "keyDown") key-press=(action "keyPress")}}
     <label id="textarea-label-{{label}}" >{{label}}</label>
   </div>
   {{/if}}

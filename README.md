@@ -1,4 +1,4 @@
-# stack-builder
+# stack-builder-engine
 
 This README outlines the details of collaborating on this Ember application.
 A short introduction of this app could easily go here.
@@ -13,22 +13,6 @@ You will need the following things properly installed on your computer.
 * [Ember CLI](https://ember-cli.com/)
 * [PhantomJS](http://phantomjs.org/)
 
-## Installation
-
-* `git clone <repository-url>` this repository
-* `cd stack-builder`
-* `npm install`
-* `bower install`
-
-## Running / Development
-
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
-
 ### Running Tests
 
 * `ember test`
@@ -39,14 +23,14 @@ Make use of the many generators for code, try `ember help generate` for more det
 * `ember build` (development)
 * `ember build --environment production` (production)
 
-### Deploying
 
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
+### Further Reading / Useful Links
 
 * [ember.js](http://emberjs.com/)
 * [ember-cli](https://ember-cli.com/)
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+
+### Notes
+* The textarea used to modify the docker-compose.yml file has been customized to allow you to add/remove indent to your lines. However, this broke the browser-specific undo/redo functions when used from the menu (either in edit or on right-click). Please use the keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z) to undo / redo your modifications.
